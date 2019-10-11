@@ -14,21 +14,16 @@
         border-style: solid;
         border-color: black;
       }
-      #snake-grid div:nth-child(odd) {
-        background-color: #dcdcdc;
-      }
-      #snake-grid div:nth-child(even) {
-        background-color: #c1c0c0;
-      }
     </style>
   </head>
   <body>
     <div id="snake-grid"></div>
     <script>
       // Set grid
-      let grid = document.getElementById("snake-grid");
-      let nodes = grid.getElementsByTagName("div");
+      const grid = document.getElementById("snake-grid");
+      const nodes = grid.getElementsByTagName("div");
       let headCoord = 0;
+      let fruitCoord = 0;
       for (i = 0;i < (21*21);i++) {
         grid.innerHTML += "<div></div>"
       }
@@ -51,31 +46,57 @@
 
       // Move Left
       let moveLeft = function() {
+        prevCoord = headCoord;
         headCoord--;
-        moveCoord();
+        moveCoord(prevCoord, headCoord);
       }
 
       // Move Up
       let moveUp = function() {
+        prevCoord = headCoord;
         headCoord -= 21;
-        moveCoord();
+        moveCoord(prevCoord, headCoord);
       }
 
       // Move Right
       let moveRight = function() {
+        prevCoord = headCoord;
         headCoord++;
-        moveCoord();
+        moveCoord(prevCoord, headCoord);
       }
 
       // Move Down
       let moveDown = function() {
+        prevCoord = headCoord;
         headCoord += 21;
-        moveCoord();
+        moveCoord(prevCoord, headCoord);
       }
 
       // Move Coordinate
-      let moveCoord = function () {
-        nodes[headCoord].style.backgroundColor = "black";
+      let moveCoord = function (prev, current) {
+        nodes[prev].style.backgroundColor = "transparent";
+        nodes[current].style.backgroundColor = "black";
+        eatFruit();
+      }
+
+      // Calculate Fruit Coord
+      let randomCoord = function() {
+        return Math.ceil(Math.random() * (21*21));
+      }
+
+      // Place Fruit
+      let placeFruit = function() {
+        fruitCoord = randomCoord();
+        nodes[fruitCoord].style.backgroundColor = "red"
+      }
+      placeFruit();
+
+      // Fruit Eaten
+      let eatFruit = function() {
+        if(headCoord === fruitCoord) {
+          console.log("GOTCHA")
+          placeFruit();
+        }
       }
     </script>
   </body>
